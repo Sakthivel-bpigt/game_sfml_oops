@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include "Sprite.h"
 
 class Game //:	public sf::RenderWindow
 {
@@ -11,7 +12,7 @@ public:
 private:
 	// window
 	sf::RenderWindow window;
-
+	Sprite windowSp;
 // member functions
 	void initialize();
 };
