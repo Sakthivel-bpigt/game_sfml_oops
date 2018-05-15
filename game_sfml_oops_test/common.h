@@ -1,7 +1,9 @@
+#pragma once
 // program in C++
 #include <iostream>
 #include <cstring>
 #include <string>
+#include <vector>
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
 

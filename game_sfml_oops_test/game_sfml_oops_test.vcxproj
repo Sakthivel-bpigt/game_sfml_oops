@@ -65,12 +65,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bricks.cpp" />
+    <ClCompile Include="Bullets.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bricks.h" />
+    <ClInclude Include="Bullets.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Sprite.h" />
   </ItemGroup>
