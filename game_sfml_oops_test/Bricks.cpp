@@ -1,19 +1,15 @@
 #include "Bricks.h"
 
 
-Bricks::Bricks(void)
+//Bricks::Bricks(void):window(NULL)
+//{
+////	window = NULL;
+//}
+
+Bricks::Bricks(sf::RenderWindow &myWindow):window(myWindow)
 {
 	init();
-	LoadBrickImages();
-	setupSprites();
-	setupBricks();
 }
-
-//Bricks::Bricks(sf::RenderWindow &myWindow)
-//{
-//	window = myWindow;
-//	init();
-//}
 
 
 Bricks::~Bricks(void)
@@ -22,6 +18,15 @@ Bricks::~Bricks(void)
 
 void Bricks::LoadBrickImages()
 {
+	imageNameSet.push_back("png/element_blue_rectangle_glossy.png");
+	imageNameSet.push_back("png/element_red_rectangle_glossy.png");
+	imageNameSet.push_back("png/element_grey_rectangle_glossy.png");
+	imageNameSet.push_back("png/element_purple_rectangle_glossy.png");
+	imageNameSet.push_back("png/element_yellow_rectangle_glossy.png");
+	imageNameSet.push_back("png/element_green_rectangle_glossy.png");
+
+	imageCnt = imageNameSet.size();
+
 	for (int i = 0; i < imageCnt; i++)
 	{
 		if (!tx[i].loadFromFile(imageNameSet[i].c_str()))
@@ -54,18 +59,15 @@ void Bricks::setupBricks()
 
 void Bricks::init()
 {
-	imageNameSet.push_back("png/element_blue_rectangle_glossy.png");
-	imageNameSet.push_back("png/element_red_rectangle_glossy.png");
-	imageNameSet.push_back("png/element_grey_rectangle_glossy.png");
-	imageNameSet.push_back("png/element_purple_rectangle_glossy.png");
-	imageNameSet.push_back("png/element_yellow_rectangle_glossy.png");
-	imageNameSet.push_back("png/element_green_rectangle_glossy.png");
+	gameOver = false;
+	shooter_position = 470;
+	spriteCnt =100;
 
-	imageCnt = imageNameSet.size();
-		spriteCnt =100;
+	setupSprites();
+	setupBricks();
 }
 
-void Bricks::draw(sf::RenderWindow &window)
+void Bricks::draw()
 {
 	for (int j = 0; j < 100; j++)
 	{
@@ -73,6 +75,30 @@ void Bricks::draw(sf::RenderWindow &window)
 		{
 			sp[j].setPosition(	bricksList[j].xy1);
 			window.draw(sp[j]);
+		}
+	}
+}
+
+bool Bricks::update()
+{
+	draw();
+	updateBricksPosition();
+	return gameOver;
+}
+
+void Bricks::updateBricksPosition()
+{
+	if(brickMoveTime.getElapsedTime().asSeconds() < 0.5) return;
+	brickMoveTime.restart();
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			bricksList[i*10+j].xy1.y += 10;
+			bricksList[i*10+j].xy2.y += 10;
+			if(bricksList[i*10+j].xy2.y >= shooter_position)
+				gameOver = true;
+
 		}
 	}
 }

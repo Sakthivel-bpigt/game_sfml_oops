@@ -1,9 +1,10 @@
 #include "game.h"
 
 
-Game::Game(void)
+Game::Game(void):bricks(gameWindow)
 {
 	initialize();
+	gameOver = false;
 }
 
 
@@ -15,8 +16,17 @@ void Game::initialize()
 {
 	 gameWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Brick shooter");
 	 windowSp.loadSprite("background.jpg");
+	// bricks = 
+	 //bricks.init(gameWindow);
 }
 
+bool Game::update()
+{
+	gameWindow.clear();
+	gameWindow.draw(windowSp.get());
+
+	return gameOver;
+}
 void Game::run()
 {
 	while (gameWindow.isOpen())
@@ -28,10 +38,8 @@ void Game::run()
             if (event.type == sf::Event::Closed)
                 gameWindow.close();
         }
-
-		gameWindow.clear();
-		gameWindow.draw(windowSp.get());
-		bricks.draw(gameWindow);
+		gameOver = this->update();
+		gameOver = bricks.update();
 		gameWindow.display();
 	}
 }

@@ -4,10 +4,11 @@ class Bricks
 {
 public:
 	//Bricks(void);
-	Bricks(void);
+	//Bricks(void);
+	Bricks(sf::RenderWindow &myWindow);
 	~Bricks(void);
 
-	//sf::RenderWindow &window;
+	sf::RenderWindow &window;
 	// Bricks
 	sf::Texture tx[10];
 	sf::Sprite sp[100];
@@ -26,13 +27,19 @@ public:
 
 	vector <string> imageNameSet;
 	int imageCnt;
-	int spriteCnt ;
+	int spriteCnt;
+	// time based brick movement
+	sf::Clock brickMoveTime;
+	bool gameOver;
+	int shooter_position ;
 
 	void LoadBrickImages();
 	void setupSprites(int l_x =10, int l_y =10);
 	void setupBricks();
 	void init();
-	void draw(sf::RenderWindow &window);
+	void draw();
+	bool update();
+	void updateBricksPosition();
 
 };
 

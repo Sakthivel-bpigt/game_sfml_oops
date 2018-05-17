@@ -19,7 +19,9 @@ private:
 	Sprite windowSp;
 	Explosion explode;
 	Bullets bullet;
+	bool gameOver;
 // member functions
 	void initialize();
+	bool update();
 };
 
