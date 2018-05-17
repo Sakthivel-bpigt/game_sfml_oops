@@ -1,7 +1,9 @@
 #include "game.h"
 
 
-Game::Game(void):bricks(gameWindow)
+Game::Game(void)
+	: bricks(gameWindow)
+	, bullets(gameWindow, bricks)
 {
 	initialize();
 	gameOver = false;
@@ -40,6 +42,7 @@ void Game::run()
         }
 		gameOver = this->update();
 		gameOver = bricks.update();
+		gameOver = bullets.update();
 		gameWindow.display();
 	}
 }

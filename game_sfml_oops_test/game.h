@@ -16,9 +16,9 @@ private:
 	// window
 	sf::RenderWindow gameWindow;
 	Bricks bricks;
+	Bullets bullets;
 	Sprite windowSp;
 	Explosion explode;
-	Bullets bullet;
 	bool gameOver;
 // member functions
 	void initialize();

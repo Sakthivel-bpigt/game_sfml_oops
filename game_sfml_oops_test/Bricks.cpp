@@ -11,7 +11,6 @@ Bricks::Bricks(sf::RenderWindow &myWindow):window(myWindow)
 	init();
 }
 
-
 Bricks::~Bricks(void)
 {
 }
