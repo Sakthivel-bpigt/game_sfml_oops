@@ -82,7 +82,9 @@ void Bricks::draw()
 bool Bricks::update()
 {
 	draw();
-	updateBricksPosition();
+	// stop moving bricks when game is over
+	if(!gameOver) 
+		updateBricksPosition();
 	return gameOver;
 }
 
@@ -98,7 +100,6 @@ void Bricks::updateBricksPosition()
 			bricksList[i*10+j].xy2.y += 10;
 			if(bricksList[i*10+j].xy2.y >= shooter_position)
 				gameOver = true;
-
 		}
 	}
 }
