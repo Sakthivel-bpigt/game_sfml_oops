@@ -16,3 +16,8 @@ using namespace std;
 #define BRICKS_AREA_START_Y 0
 #define BRICKS_AREA_END_X 850
 #define BRICKS_AREA_END_Y 470
+
+#define PI 3.14159265
+
+#define DEBUG 0
+

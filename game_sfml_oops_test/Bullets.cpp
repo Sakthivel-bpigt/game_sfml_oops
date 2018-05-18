@@ -41,7 +41,7 @@ void Bullets::setupSprites()
 void Bullets::draw()
 {
 	shooterSp.setPosition(shooter_position);
-	shooterSp.setRotation(-90); // absolute angle
+//	shooterSp.setRotation(-90); // absolute angle
 	window.draw(shooterSp);
 	//for (int j = 0; j < 100; j++)
 	//{
@@ -55,9 +55,35 @@ void Bullets::draw()
 
 bool Bullets::update()
 {
+	updateShooter();
 	draw();
 	// stop moving bricks when game is over
 	/*if(!gameOver) 
 		updateBricksPosition();*/
 	return gameOver;
+}
+
+void Bullets::updateShooter()
+{
+	sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(window));
+
+	sf::Vector2f v1 = calcUnitVector(shooter_position, mousePosition);
+	sf::Vector2f v2 = sf::Vector2f (1,0.0000001);
+	//Finding the Angle Between Two Vectors
+	float theta = acosf(v1.x*v2.x + v1.y*v2.y ) * 180.0 / PI;
+	shooterSp.setRotation( -theta); // absolute angle
+	
+	if(DEBUG)
+	{
+		cout<< "V1 ("<<v1.x<<", "<<v1.y <<")  ";
+		cout<< v1.x*v2.x + v1.y*v2.y <<"  ";
+		cout<< -theta<<endl;
+	}
+}
+sf::Vector2f Bullets::calcUnitVector(sf::Vector2f p1, sf::Vector2f p2)
+{
+	sf::Vector2f diffPos = (p2 - p1);
+	float diffLength = sqrtf(diffPos.x * diffPos.x + diffPos.y * diffPos.y);
+	float diffNorm = 1/diffLength;
+	return diffPos * diffNorm;
 }

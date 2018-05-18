@@ -40,5 +40,8 @@ public:
 	void setupSprites();
 	void draw();
 	bool update();
+	void updateShooter();
+	sf::Vector2f calcUnitVector(sf::Vector2f p1, sf::Vector2f p2);
+
 };
 
