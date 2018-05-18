@@ -24,15 +24,18 @@ public:
 	{
 		sf::Sprite bulletSp;
 		sf::Vector2f xy1 ; 
-		//sf::Vector2f xy2;
-		bool display ;
+		sf::Vector2f direction;
+		bool active ;
 		Bullet()
 		{
-			xy1 = sf::Vector2f(0, 0); // brick default position
-			//xy2 = sf::Vector2f(0, 0); // brick default position
-			display = true;
+			xy1 = sf::Vector2f(SHOOTER_POSITION_X, SHOOTER_POSITION_Y); // Bullet default position
+			direction = sf::Vector2f(0, 0); // Bullet default direction
+			active = false;
 		}
 	}bulletList[MAX_BULLETS];
+	sf::Clock NextBulletWaitTime;
+	float bulletSpeed;
+	bool leftMouseClick;
 
 
 	// Member Functions
@@ -41,6 +44,8 @@ public:
 	void draw();
 	bool update();
 	void updateShooter();
+	void updateBullets();
+	void shootBullets();
 	sf::Vector2f calcUnitVector(sf::Vector2f p1, sf::Vector2f p2);
 
 };
