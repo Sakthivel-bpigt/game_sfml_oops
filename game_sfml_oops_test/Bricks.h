@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#define MAX_BRICKS 100
 class Bricks
 {
 public:
@@ -11,7 +12,7 @@ public:
 	sf::RenderWindow &window;
 	// Bricks
 	sf::Texture tx[10];
-	sf::Sprite sp[100];
+	sf::Sprite sp[MAX_BRICKS];
 	struct Brick
 	{
 		sf::Vector2f xy1 ; 
@@ -23,7 +24,7 @@ public:
 			xy2 = sf::Vector2f(0, 0); // brick default position
 			display = true;
 		}
-	}bricksList[100];
+	}bricksList[MAX_BRICKS];
 
 	vector <string> imageNameSet;
 	int imageCnt;
@@ -40,6 +41,8 @@ public:
 	void draw();
 	bool update();
 	void updateBricksPosition();
+	bool bulletHit(sf::Vector2f bulletPosion, sf::Vector2f bulletNextPosion);
+	bool lineSegmentIntersction(sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3, sf::Vector2f p4);
 
 };
 

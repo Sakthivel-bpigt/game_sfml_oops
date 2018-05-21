@@ -1,8 +1,24 @@
 #pragma once
 #include "Bricks.h"
 #define MAX_BULLETS 10
+#define BULLET_SPEED 1
 #define SHOOTER_POSITION_X 450
 #define SHOOTER_POSITION_Y 470
+class Bullet
+{
+public:
+	sf::Sprite bulletSp;
+	sf::Vector2f xy1 ; 
+	sf::Vector2f direction;
+	bool active ;
+	float bulletSpeed;
+
+	Bullet();
+	~Bullet();
+	void initi();
+	void hitBrick(Bricks &bricks);
+	void fly();
+};
 class Bullets
 {
 public:
@@ -11,31 +27,20 @@ public:
 
 	sf::RenderWindow &window;
 	Bricks &bricks;
-
 	bool gameOver;
-	sf::Vector2f shooter_position;
+
 	// Shooter
+	sf::Vector2f shooter_position;
 	sf::Texture shooterTx;
 	sf::Sprite shooterSp;
 
 	//Bullets
 	sf::Texture bulletTx;
-	struct Bullet
-	{
-		sf::Sprite bulletSp;
-		sf::Vector2f xy1 ; 
-		sf::Vector2f direction;
-		bool active ;
-		Bullet()
-		{
-			xy1 = sf::Vector2f(SHOOTER_POSITION_X, SHOOTER_POSITION_Y); // Bullet default position
-			direction = sf::Vector2f(0, 0); // Bullet default direction
-			active = false;
-		}
-	}bulletList[MAX_BULLETS];
+	Bullet bulletList[MAX_BULLETS];
 	sf::Clock NextBulletWaitTime;
-	float bulletSpeed;
 	bool leftMouseClick;
+
+	// Collision detection
 
 
 	// Member Functions
