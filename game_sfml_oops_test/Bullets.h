@@ -1,23 +1,25 @@
 #pragma once
 #include "Bricks.h"
-#define MAX_BULLETS 10
-#define BULLET_SPEED 1
-#define SHOOTER_POSITION_X 450
-#define SHOOTER_POSITION_Y 470
+#include "Explosion.h"
+
+//#define SHOOTER_POSITION_X 450
+//#define SHOOTER_POSITION_Y 470
 class Bullet
 {
 public:
-	sf::Sprite bulletSp;
-	sf::Vector2f xy1 ; 
-	sf::Vector2f direction;
-	bool active ;
-	float bulletSpeed;
+	sf::Sprite bulletSp;		// bullet image
+	sf::Vector2f xy1 ;			// bullet position
+	sf::Vector2f direction;		// bullet direction
+	bool active ;				// is bullet alive
+	float bulletSpeed;			// bullet travelling speed
 
 	Bullet();
 	~Bullet();
 	void initi();
-	void hitBrick(Bricks &bricks);
+	bool hitBrick(Bricks &bricks, Explosion *pExplosionList);
 	void fly();
+	void setSprite(sf::Texture &bulletTx, sf::Vector2f pos);
+	void draw(sf::RenderWindow &myWindow);
 };
 class Bullets
 {
@@ -40,16 +42,19 @@ public:
 	sf::Clock NextBulletWaitTime;
 	bool leftMouseClick;
 
-	// Collision detection
-
+	// Collision 
+	sf::Texture explosionTx;
+	Explosion explosionList[MAX_BULLETS];
 
 	// Member Functions
 	void LoadImages();
-	void setupSprites();
+	void setupBullets();
+	void setupExplosions();
 	void draw();
 	bool update();
 	void updateShooter();
 	void updateBullets();
+	void updateExplosions();
 	void shootBullets();
 	sf::Vector2f calcUnitVector(sf::Vector2f p1, sf::Vector2f p2);
 

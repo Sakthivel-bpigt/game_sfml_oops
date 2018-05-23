@@ -11,7 +11,13 @@ Bullets::Bullets(sf::RenderWindow &myWindow, Bricks &bricks)
 	leftMouseClick = false;
 
 	//Functions
-	setupSprites();
+	LoadImages();
+	
+	shooterSp.setTexture(shooterTx);
+	shooterSp.setOrigin(sf::Vector2f(64, 64));
+
+	setupBullets();
+	setupExplosions();
 }
 
 Bullets::~Bullets(void)
@@ -31,21 +37,28 @@ void Bullets::LoadImages()
 	// 22 X 22
 	if (!bulletTx.loadFromFile("png/ballBlue.png"))
 		std::cout<<" image loading error!";
-}
-void Bullets::setupSprites()
-{
-	LoadImages();
-	
-	shooterSp.setTexture(shooterTx);
-	//shooterSp.setOrigin(sf::Vector2f(113, 113));
-	shooterSp.setOrigin(sf::Vector2f(64, 64));
 
+	// 128 X 128
+	if (!explosionTx.loadFromFile("png/explosion.png"))
+		std::cout<<" image loading error!";
+}
+void Bullets::setupBullets()
+{
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
-		bulletList[i].bulletSp.setTexture(bulletTx);
-		bulletList[i].bulletSp.setOrigin(sf::Vector2f(11, 11));
+		bulletList[i].setSprite(bulletTx, sf::Vector2f(11, 11));
 	}
 }
+
+void Bullets::setupExplosions()
+{
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		//explosionList[i].pWindow = &window;
+		explosionList[i].setSprite(explosionTx, sf::Vector2f(64, 64));
+	}
+}
+
 void Bullets::draw()
 {
 	shooterSp.setPosition(shooter_position);
@@ -55,10 +68,10 @@ void Bullets::draw()
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
 		if(bulletList[i].active)
-		{
-			bulletList[i].bulletSp.setPosition(bulletList[i].xy1);
-			window.draw(bulletList[i].bulletSp);
-		}
+			bulletList[i].draw(window);
+
+		if(explosionList[i].active)
+			explosionList[i].draw(window);
 	}
 }
 
@@ -67,6 +80,7 @@ bool Bullets::update()
 	updateShooter();
 	shootBullets();
 	updateBullets();
+	updateExplosions();
 	draw();
 	// stop moving bricks when game is over
 	/*if(!gameOver) 
@@ -106,7 +120,7 @@ void Bullets::updateBullets()
 		if(bulletList[i].active)
 		{
 			bulletList[i].fly();
-			bulletList[i].hitBrick(bricks);
+			bool collision = bulletList[i].hitBrick(bricks, explosionList);
 		}
 	}
 	if(DEBUG)
@@ -116,13 +130,22 @@ void Bullets::updateBullets()
 		//cout<< -theta<<endl;
 	}
 }
+
+void Bullets::updateExplosions()
+{
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		explosionList[i].update();
+	}
+}
+
 void Bullets::shootBullets()
 {
 	leftMouseClick  = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	if (leftMouseClick)
 	{
 		// Check for waiting time
-		if(NextBulletWaitTime.getElapsedTime().asSeconds() < 0.2) return;
+		if(NextBulletWaitTime.getElapsedTime().asSeconds() < NEXT_BULLET_TIME) return;
 		NextBulletWaitTime.restart();
 		
 		sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(window));
@@ -152,18 +175,28 @@ void Bullet::initi()
 	active = false;
 	bulletSpeed = BULLET_SPEED;
 }
-void Bullet::hitBrick(Bricks &bricks)
+bool Bullet::hitBrick(Bricks &bricks, Explosion *pExplosionList)
 {
+	bool hitSomething = false;
 	if(active)
 	{
 		sf::Vector2f p1 = xy1;
 		sf::Vector2f p2 = xy1 + direction * bulletSpeed;
-		bool hit = bricks.bulletHit(p1,p2);
-		if(hit){
+		hitSomething = bricks.bulletHit(p1,p2);
+		if(hitSomething)
+		{
+			// setting explosion
+			
+			for (int j = 0; j < MAX_BULLETS; j++)
+			{
+				if(!pExplosionList[j].active)
+				{
+					pExplosionList[j].setExplode(xy1);
+					break;
+				}
+			}
+
 			initi();
-
-			// set explosion
-
 		}else
 		{
 			// Deactivate the bullet if it goes out of the play area (window)
@@ -174,8 +207,20 @@ void Bullet::hitBrick(Bricks &bricks)
 				initi();
 		}
 	}
+	return hitSomething;
 }
 void Bullet::fly()
 {
 	xy1 += direction * bulletSpeed;
+}
+
+void Bullet::setSprite(sf::Texture &bulletTx, sf::Vector2f pos)
+{
+	bulletSp.setTexture(bulletTx);
+	bulletSp.setOrigin(pos);
+}
+void Bullet::draw(sf::RenderWindow &myWindow)
+{
+	bulletSp.setPosition(xy1);
+	myWindow.draw(bulletSp);
 }
