@@ -12,6 +12,7 @@ public:
 	sf::Vector2f direction;		// bullet direction
 	bool active ;				// is bullet alive
 	float bulletSpeed;			// bullet travelling speed
+	Colors color;
 
 	Bullet();
 	~Bullet();
@@ -44,7 +45,7 @@ public:
 	Bullet bulletList[MAX_BULLETS];
 	sf::Clock NextBulletWaitTime;
 	bool leftMouseClick;
-	int nextBulletColor;
+	Colors nextBulletColor;
 	Bullet nextBullet;
 	// Collision 
 	sf::Texture explosionTx;
@@ -65,7 +66,7 @@ public:
 	void updateNextBullet();
 	void drawNextBullet();
 
-	int randomNumberGen(int limit){return rand() % limit;};
+	Colors randomNumberGen(int limit){return Colors(rand()%limit);};
 	sf::Vector2f calcUnitVector(sf::Vector2f p1, sf::Vector2f p2);
 };
 

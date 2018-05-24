@@ -29,6 +29,9 @@ Bullets::~Bullets(void)
 
 void Bullets::LoadImages()
 {
+	//*********************************************************************
+	// This image array's elements order is in sync with the 'Colors' enum
+	//********************************************************************
 	imageNameSet.push_back("png/element_blue_square.png");
 	imageNameSet.push_back("png/element_red_square.png");
 	imageNameSet.push_back("png/element_grey_square.png");
@@ -60,7 +63,8 @@ void Bullets::setupBullets()
 {
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
-		bulletList[i].setSprite(tx[rand()%imageCnt], sf::Vector2f(11, 11));
+		bulletList[i].color = Colors(rand()%imageCnt);
+		bulletList[i].setSprite(tx[bulletList[i].color], sf::Vector2f(11, 11));
 		//sp[i*10+j].setTexture(tx[rand()%imageCnt]);
 	}
 }
@@ -170,6 +174,7 @@ void Bullets::shootBullets()
 			{
 				bulletList[i].active = true;
 				bulletList[i].direction = calcUnitVector(shooter_position, mousePosition);
+				bulletList[i].color = nextBulletColor;
 				bulletList[i].setSprite(tx[nextBulletColor], sf::Vector2f(11, 11));
 				leftMouseClick = false;
 				break;
@@ -226,7 +231,7 @@ bool Bullet::hitBrick(Bricks &bricks, Explosion *pExplosionList)
 	{
 		sf::Vector2f p1 = xy1;
 		sf::Vector2f p2 = xy1 + direction * bulletSpeed;
-		hitSomething = bricks.bulletHit(p1,p2);
+		hitSomething = bricks.bulletHit(p1,p2, color);
 		if(hitSomething)
 		{
 			// setting explosion

@@ -16,6 +16,8 @@ public:
 	{
 		sf::Vector2f xy1 ; 
 		sf::Vector2f xy2;
+		Colors brickColor;
+		sf::Sprite sp;
 		bool display ;
 		Brick()
 		{
@@ -40,7 +42,8 @@ public:
 	void draw();
 	bool update();
 	void updateBricksPosition();
-	bool bulletHit(sf::Vector2f bulletPosion, sf::Vector2f bulletNextPosion);
+	bool bulletHit(sf::Vector2f bulletPosion, sf::Vector2f bulletNextPosion, Colors bulletColor);
+	void findSameColorNeighbors(int b_col , int b_row, set<int> &sameColorset);
 	bool lineSegmentIntersction(sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3, sf::Vector2f p4);
 
 };

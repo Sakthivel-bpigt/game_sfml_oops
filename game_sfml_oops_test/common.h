@@ -4,6 +4,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <set>
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
 
@@ -19,6 +20,7 @@ using namespace std;
 #define BRICKS_AREA_END_Y 470
 #define BRICKS_HEIGHT 40
 #define BRICKS_WIDTH 70
+#define BRICKS_MOVE_DIST 10
 
 #define MOVE_BRICK_TIME 3 // The time value as a number of seconds.
 
@@ -38,6 +40,9 @@ using namespace std;
 #define PI 3.14159265
 
 #define DEBUG 0
+
+// sync the color array with the image arrays
+enum Colors { blue, red, grey, purple, yellow, green };
 
 // try static window base class and
 // inherite by others, so there'll be 
