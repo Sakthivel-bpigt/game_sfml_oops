@@ -1,6 +1,5 @@
 #pragma once
 #include "common.h"
-#define MAX_BRICKS 100
 class Bricks
 {
 public:

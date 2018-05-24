@@ -15,6 +15,16 @@ Bricks::~Bricks(void)
 {
 }
 
+void Bricks::init()
+{
+	gameOver = false;
+	shooter_position = SHOOTER_POSITION_Y;
+	spriteCnt =100;
+
+	setupSprites();
+	setupBricks();
+}
+
 void Bricks::LoadBrickImages()
 {
 	imageNameSet.push_back("png/element_blue_rectangle_glossy.png");
@@ -32,43 +42,41 @@ void Bricks::LoadBrickImages()
 		std::cout<<" image loading error!";
 	}
 }
+
 void Bricks::setupSprites(int l_x, int l_y)
 {
 	LoadBrickImages();
-	for (int i = 0; i < l_y; i++)
+	for (int i = 0; i < ROW_BRICKS; i++)
 	{
-		for (int j = 0; j < l_x; j++)
+		for (int j = 0; j < COLUMN_BRICKS; j++)
 		{
 			sp[i*10+j].setTexture(tx[rand()%imageCnt]);
 			//sp[cnt].setOrigin(sf::Vector2f(25, 25));
 		}
 	}
 }
+
 void Bricks::setupBricks()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < ROW_BRICKS; i++)
 	{
-		for (int j = 0; j < 10; j++)
+		for (int j = 0; j < COLUMN_BRICKS; j++)
 		{
-			bricksList[i*10+j].xy1 = sf::Vector2f(100+(70*j), -315+(40*i));
-			bricksList[i*10+j].xy2 = sf::Vector2f(100+(70*(j+1)), -315+(40*(i+1)));
+			// Setup the position of the brick
+			bricksList[i*10+j].xy1 = sf::Vector2f(	BRICKS_AREA_START_X + (BRICKS_WIDTH*j),
+													BRICKS_AREA_END_Y - (BRICKS_HEIGHT*(i+1)));
+			bricksList[i*10+j].xy2 = sf::Vector2f(	BRICKS_AREA_START_X + (BRICKS_WIDTH*(j+1)),
+													BRICKS_AREA_END_Y - (BRICKS_HEIGHT*i));
+			
+			// make the bottom five rows not active and used for wrong bullets that hit
+			if(i <= 5) bricksList[i*10+j].display = false;
 		}
 	}
 }
 
-void Bricks::init()
-{
-	gameOver = false;
-	shooter_position = 470;
-	spriteCnt =100;
-
-	setupSprites();
-	setupBricks();
-}
-
 void Bricks::draw()
 {
-	for (int j = 0; j < 100; j++)
+	for (int j = 0; j < MAX_BRICKS; j++)
 	{
 		if(bricksList[j].display)
 		{
@@ -89,11 +97,11 @@ bool Bricks::update()
 
 void Bricks::updateBricksPosition()
 {
-	if(brickMoveTime.getElapsedTime().asSeconds() < 0.5) return;
+	if(brickMoveTime.getElapsedTime().asSeconds() < MOVE_BRICK_TIME) return;
 	brickMoveTime.restart();
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < ROW_BRICKS; i++)
 	{
-		for (int j = 0; j < 10; j++)
+		for (int j = 0; j < COLUMN_BRICKS; j++)
 		{
 			bricksList[i*10+j].xy1.y += 10;
 			bricksList[i*10+j].xy2.y += 10;

@@ -1,6 +1,5 @@
 #include "Bullets.h"
 
-
 Bullets::Bullets(sf::RenderWindow &myWindow, Bricks &bricks)
 	: window(myWindow)
 	, bricks(bricks)
@@ -18,6 +17,10 @@ Bullets::Bullets(sf::RenderWindow &myWindow, Bricks &bricks)
 
 	setupBullets();
 	setupExplosions();
+	srand(time(0));
+	chooseNextBulletColor();
+	setupNextBullet();
+
 }
 
 Bullets::~Bullets(void)
@@ -26,16 +29,27 @@ Bullets::~Bullets(void)
 
 void Bullets::LoadImages()
 {
-	//// 225 X 225
-	//if (!shooterTx.loadFromFile("png/shooter4.png"))
-	//	std::cout<<" image loading error!";
+	imageNameSet.push_back("png/element_blue_square.png");
+	imageNameSet.push_back("png/element_red_square.png");
+	imageNameSet.push_back("png/element_grey_square.png");
+	imageNameSet.push_back("png/element_purple_square.png");
+	imageNameSet.push_back("png/element_yellow_square.png");
+	imageNameSet.push_back("png/element_green_square.png");
+
+	imageCnt = imageNameSet.size();
+
+	for (int i = 0; i < imageCnt; i++)
+	{
+		if (!tx[i].loadFromFile(imageNameSet[i].c_str()))
+		std::cout<<" image loading error!";
+	}
 
 	// 128 X 128
 	if (!shooterTx.loadFromFile("png/shooter3.png"))
 		std::cout<<" image loading error!";
 
 	// 22 X 22
-	if (!bulletTx.loadFromFile("png/ballBlue.png"))
+	if (!bulletTx.loadFromFile("png/element_blue_square.png"))
 		std::cout<<" image loading error!";
 
 	// 128 X 128
@@ -46,7 +60,8 @@ void Bullets::setupBullets()
 {
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
-		bulletList[i].setSprite(bulletTx, sf::Vector2f(11, 11));
+		bulletList[i].setSprite(tx[rand()%imageCnt], sf::Vector2f(11, 11));
+		//sp[i*10+j].setTexture(tx[rand()%imageCnt]);
 	}
 }
 
@@ -62,7 +77,6 @@ void Bullets::setupExplosions()
 void Bullets::draw()
 {
 	shooterSp.setPosition(shooter_position);
-//	shooterSp.setRotation(-90); // absolute angle
 	window.draw(shooterSp);
 
 	for (int i = 0; i < MAX_BULLETS; i++)
@@ -73,6 +87,7 @@ void Bullets::draw()
 		if(explosionList[i].active)
 			explosionList[i].draw(window);
 	}
+	drawNextBullet();
 }
 
 bool Bullets::update()
@@ -155,19 +170,48 @@ void Bullets::shootBullets()
 			{
 				bulletList[i].active = true;
 				bulletList[i].direction = calcUnitVector(shooter_position, mousePosition);
+				bulletList[i].setSprite(tx[nextBulletColor], sf::Vector2f(11, 11));
 				leftMouseClick = false;
 				break;
 			}
 		}
+		// choose next bullet color
+		chooseNextBulletColor();
+		updateNextBullet();
 	}
 }
+
+void Bullets::chooseNextBulletColor()
+{
+	nextBulletColor = randomNumberGen(imageCnt);
+}
+
+void Bullets::setupNextBullet()
+{
+	nextBullet.xy1 = sf::Vector2f(SHOOTER_POSITION_X, SHOOTER_POSITION_Y+50); // Bullet default position
+	nextBullet.active = true;
+	nextBullet.setSprite(tx[nextBulletColor], sf::Vector2f(11, 11));
+}
+
+void Bullets::updateNextBullet()
+{
+	nextBullet.setSprite(tx[nextBulletColor], sf::Vector2f(11, 11));
+}
+
+void Bullets::drawNextBullet()
+{
+	nextBullet.draw(window);
+}
+
 Bullet::Bullet()
 {
 	initi();
 }
+
 Bullet::~Bullet()
 {
 }
+
 void Bullet::initi()
 {
 	xy1 = sf::Vector2f(SHOOTER_POSITION_X, SHOOTER_POSITION_Y); // Bullet default position

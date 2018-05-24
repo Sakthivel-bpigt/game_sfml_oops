@@ -37,11 +37,15 @@ public:
 	sf::Sprite shooterSp;
 
 	//Bullets
+	vector <string> imageNameSet;
+	int imageCnt;
+	sf::Texture tx[10];
 	sf::Texture bulletTx;
 	Bullet bulletList[MAX_BULLETS];
 	sf::Clock NextBulletWaitTime;
 	bool leftMouseClick;
-
+	int nextBulletColor;
+	Bullet nextBullet;
 	// Collision 
 	sf::Texture explosionTx;
 	Explosion explosionList[MAX_BULLETS];
@@ -56,7 +60,12 @@ public:
 	void updateBullets();
 	void updateExplosions();
 	void shootBullets();
-	sf::Vector2f calcUnitVector(sf::Vector2f p1, sf::Vector2f p2);
+	void chooseNextBulletColor();
+	void setupNextBullet();
+	void updateNextBullet();
+	void drawNextBullet();
 
+	int randomNumberGen(int limit){return rand() % limit;};
+	sf::Vector2f calcUnitVector(sf::Vector2f p1, sf::Vector2f p2);
 };
 
