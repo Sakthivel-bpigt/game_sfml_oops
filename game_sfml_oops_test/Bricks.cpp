@@ -52,10 +52,11 @@ void Bricks::setupSprites(int l_x, int l_y)
 	LoadBrickImages();
 	for (int i = 0; i < ROW_BRICKS; i++)
 	{
-		for (int j = 0; j < COLUMN_BRICKS; j++)
+		for (int k = 0; k < COLUMN_BRICKS; k++)
 		{
-			bricksList[i*10+j].brickColor = Colors(rand()%imageCnt);
-			bricksList[i*10+j].sp.setTexture(tx[bricksList[i*10+j].brickColor]);
+			int j = i*COLUMN_BRICKS+k;
+			bricksList[j].brickColor = Colors(rand()%imageCnt);
+			bricksList[j].sp.setTexture(tx[bricksList[j].brickColor]);
 			//sp[cnt].setOrigin(sf::Vector2f(25, 25));
 		}
 	}
@@ -65,16 +66,17 @@ void Bricks::setupBricks()
 {
 	for (int i = 0; i < ROW_BRICKS; i++)
 	{
-		for (int j = 0; j < COLUMN_BRICKS; j++)
+		for (int k = 0; k < COLUMN_BRICKS; k++)
 		{
+			int j = i*COLUMN_BRICKS+k;
 			// Setup the position of the brick
-			bricksList[i*10+j].xy1 = sf::Vector2f(	BRICKS_AREA_START_X + (BRICKS_WIDTH*j),
+			bricksList[j].xy1 = sf::Vector2f(	BRICKS_AREA_START_X + (BRICKS_WIDTH*k),
 													BRICKS_AREA_END_Y - (BRICKS_HEIGHT*(i+1)));
-			bricksList[i*10+j].xy2 = sf::Vector2f(	BRICKS_AREA_START_X + (BRICKS_WIDTH*(j+1)),
+			bricksList[j].xy2 = sf::Vector2f(	BRICKS_AREA_START_X + (BRICKS_WIDTH*(k+1)),
 													BRICKS_AREA_END_Y - (BRICKS_HEIGHT*i));
 			
 			// make the bottom five rows not active and used for wrong bullets that hit
-			if(i <= 5) bricksList[i*10+j].display = false;
+			if(i <= 5) bricksList[j].display = false;
 		}
 	}
 }
@@ -106,11 +108,12 @@ void Bricks::updateBricksPosition()
 	brickMoveTime.restart();
 	for (int i = 0; i < ROW_BRICKS; i++)
 	{
-		for (int j = 0; j < COLUMN_BRICKS; j++)
+		for (int k = 0; k < COLUMN_BRICKS; k++)
 		{
-			bricksList[i*COLUMN_BRICKS+j].xy1.y += BRICKS_MOVE_DIST;
-			bricksList[i*COLUMN_BRICKS+j].xy2.y += BRICKS_MOVE_DIST;
-			if(bricksList[i*COLUMN_BRICKS+j].xy2.y >= shooter_position)
+			int j = i*COLUMN_BRICKS+k;
+			bricksList[j].xy1.y += BRICKS_MOVE_DIST;
+			bricksList[j].xy2.y += BRICKS_MOVE_DIST;
+			if(bricksList[j].xy2.y >= shooter_position)
 				gameOver = true;
 		}
 	}
@@ -151,38 +154,47 @@ bool Bricks::bulletHit(sf::Vector2f bulletPosion, sf::Vector2f bulletNextPosion,
 				p4 = bricksList[j].xy2;
 				brickRight = lineSegmentIntersction(p1, p2, p3, p4);
 
-				if(brickBottom)
+				if(brickBottom || brickLeft || brickRight)
 				{
-					brick_col_ID = k;
-					brick_row_ID = i-1;
-				}else if(brickLeft)
-				{
-					brick_col_ID = k+1;
-					brick_row_ID = i;
-				}else if(brickRight)
-				{
-					brick_col_ID = k-1;
-					brick_row_ID = i;
+					if(brickBottom)
+					{
+						brick_col_ID = k;
+						brick_row_ID = i-1;
+					}else if(brickLeft)
+					{
+						brick_col_ID = k-1;
+						brick_row_ID = i;
+					}else if(brickRight)
+					{
+						brick_col_ID = k+1;
+						brick_row_ID = i;
+					}
+					brickHit = true;
+				//**********************************************
+				// once found the first brick, exit the loops
+				//**********************************************
+					break;
 				}
 			}
 		}
+		//**********************************************
+		// Once found the first brick, exit the loops
+		//**********************************************
+		if(brickHit) break;
 	}
 	if(brick_col_ID >= 0 && brick_row_ID >= 0)
 	{
+		//Add the brick in the appropriate place.
 		int j = brick_row_ID*COLUMN_BRICKS+brick_col_ID;
-		if(bulletColor == bricksList[j].brickColor)
-		{
-			set<int> sameColorset;
-			findSameColorNeighbors(brick_col_ID , brick_row_ID, sameColorset);
-			brickHit = true;
-
+		bricksList[j].brickColor = bulletColor;
+		bricksList[j].sp.setTexture(tx[bricksList[j].brickColor]);
+		bricksList[j].display = true;
+		// FInd same colored bricks
+		set<int> sameColorset;
+		findSameColorNeighbors(brick_col_ID , brick_row_ID, sameColorset);
+		if(sameColorset.size() >1)
 			for (std::set<int>::iterator it=sameColorset.begin(); it!=sameColorset.end(); ++it)
 				bricksList[*it].display = false;
-			bricksList[j].display = true;
-		}else
-		{
-			int i=0;
-		}
 	}
 	return brickHit;
 }
@@ -200,28 +212,28 @@ void Bricks::findSameColorNeighbors(int b_col , int b_row, set<int> &sameColorse
 		if(b_col - 1 >=0)
 		{
 			int k = b_row * COLUMN_BRICKS + (b_col-1);
-			if( searchColor == bricksList[k].brickColor)
+			if( bricksList[k].display && searchColor == bricksList[k].brickColor)
 				findSameColorNeighbors(b_col-1 , b_row, sameColorset);
 		}
 	// right side
 		if(b_col + 1 < COLUMN_BRICKS)
 		{	
 			int k = b_row * COLUMN_BRICKS + (b_col+1);
-			if( searchColor == bricksList[k].brickColor)
+			if( bricksList[k].display && searchColor == bricksList[k].brickColor)
 				findSameColorNeighbors(b_col+1 , b_row, sameColorset);
 		}
 	// top side
 		if(b_row - 1 >=0)
 		{	
 			int k = (b_row-1) * COLUMN_BRICKS + b_col;
-			if( searchColor == bricksList[k].brickColor)
+			if( bricksList[k].display && searchColor == bricksList[k].brickColor)
 				findSameColorNeighbors(b_col , b_row-1 , sameColorset);
 		}
 	// right side
 		if(b_row + 1 < ROW_BRICKS)
 		{
 			int k = (b_row+1) * COLUMN_BRICKS + b_col;
-			if( searchColor == bricksList[k].brickColor)
+			if( bricksList[k].display && searchColor == bricksList[k].brickColor)
 				findSameColorNeighbors(b_col , b_row+1, sameColorset);
 		}
 	}

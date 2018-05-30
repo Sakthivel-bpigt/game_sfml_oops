@@ -41,8 +41,8 @@ void Game::run()
                 gameWindow.close();
         }
 		gameOver = this->update();
-		gameOver = bricks.update();
 		gameOver = bullets.update();
+		gameOver = bricks.update();
 		gameWindow.display();
 	}
 }
