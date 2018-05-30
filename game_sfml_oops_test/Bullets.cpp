@@ -88,8 +88,8 @@ void Bullets::draw()
 		if(bulletList[i].active)
 			bulletList[i].draw(window);
 
-//		if(explosionList[i].active)
-//			explosionList[i].draw(window);
+		if(explosionList[i].active)
+			explosionList[i].draw(window);
 	}
 	drawNextBullet();
 }

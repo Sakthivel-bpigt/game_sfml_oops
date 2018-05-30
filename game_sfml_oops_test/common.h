@@ -43,7 +43,6 @@ using namespace std;
 
 // sync the color array with the image arrays
 enum Colors { blue, red, grey, purple, yellow, green };
-enum Side { top, bottom, left, right };
 
 // try static window base class and
 // inherite by others, so there'll be 
