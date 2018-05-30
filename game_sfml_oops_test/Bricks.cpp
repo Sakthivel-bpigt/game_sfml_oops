@@ -76,6 +76,7 @@ void Bricks::setupBricks()
 			
 			// make the bottom five rows not active and used for wrong bullets that hit
 			if(i <= 5) bricksList[j].display = false;
+			else bricksList[j].display = true;
 		}
 	}
 
