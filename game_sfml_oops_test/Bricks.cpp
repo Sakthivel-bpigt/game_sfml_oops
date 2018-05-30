@@ -17,7 +17,6 @@ Bricks::~Bricks(void)
 
 void Bricks::init()
 {
-	gameOver = false;
 	shooter_position = SHOOTER_POSITION_Y;
 	spriteCnt =100;
 
@@ -79,6 +78,10 @@ void Bricks::setupBricks()
 			if(i <= 5) bricksList[j].display = false;
 		}
 	}
+
+	// in case the game is restarted.
+	gameOver = false;
+
 }
 
 void Bricks::draw()
@@ -104,16 +107,23 @@ bool Bricks::update()
 
 void Bricks::updateBricksPosition()
 {
-	if(brickMoveTime.getElapsedTime().asSeconds() < MOVE_BRICK_TIME) return;
-	brickMoveTime.restart();
+	bool move = false;
+	if(brickMoveTime.getElapsedTime().asSeconds() > MOVE_BRICK_TIME)
+	{
+		brickMoveTime.restart();
+		move = true;
+	}
 	for (int i = 0; i < ROW_BRICKS; i++)
 	{
 		for (int k = 0; k < COLUMN_BRICKS; k++)
 		{
 			int j = i*COLUMN_BRICKS+k;
-			bricksList[j].xy1.y += BRICKS_MOVE_DIST;
-			bricksList[j].xy2.y += BRICKS_MOVE_DIST;
-			if(bricksList[j].xy2.y >= shooter_position)
+			if(move)
+			{
+				bricksList[j].xy1.y += BRICKS_MOVE_DIST;
+				bricksList[j].xy2.y += BRICKS_MOVE_DIST;
+			}
+			if(bricksList[j].display && bricksList[j].xy2.y >= shooter_position)
 				gameOver = true;
 		}
 	}

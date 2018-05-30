@@ -18,10 +18,21 @@ private:
 	Bricks bricks;
 	Bullets bullets;
 	Sprite windowSp;
+	Sprite playSp;
+	Sprite gameOverSp;
 	Explosion explode;
 	bool gameOver;
+	bool gameStart;
+	sf::Clock gameTime;
+
+
+
+
 // member functions
 	void initialize();
 	bool update();
+	void setupPlayButton();
+	void setupGameOverButton();
+	void gameRestart();
 };
 

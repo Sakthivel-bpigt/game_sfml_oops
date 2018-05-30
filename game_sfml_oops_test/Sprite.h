@@ -14,5 +14,8 @@ public:
 	sf::Texture Tx;
 	sf::Sprite Sp;
 	sf::Vector2f Position;
+
+	void setPosition(sf::Vector2f Position);
+	void setOrigin(sf::Vector2f Position);
 };
 
