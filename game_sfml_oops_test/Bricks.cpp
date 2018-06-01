@@ -22,9 +22,10 @@ void Bricks::init()
 
 	setupSprites();
 	setupBricks();
+	setupExplosions();
 }
 
-void Bricks::LoadBrickImages()
+void Bricks::LoadImages()
 {
 	//********************************************************************
 	// This image array's elements order is in sync with the 'Colors' enum
@@ -44,11 +45,15 @@ void Bricks::LoadBrickImages()
 		if (!tx[i].loadFromFile(imageNameSet[i].c_str()))
 		std::cout<<" image loading error!";
 	}
+	
+	// 128 X 128
+	if (!explosionTx.loadFromFile("png/explosion.png"))
+		std::cout<<" image loading error!";
 }
 
 void Bricks::setupSprites(int l_x, int l_y)
 {
-	LoadBrickImages();
+	LoadImages();
 	for (int i = 0; i < ROW_BRICKS; i++)
 	{
 		for (int k = 0; k < COLUMN_BRICKS; k++)
@@ -83,9 +88,23 @@ void Bricks::setupBricks()
 	// in case the game is restarted.
 	gameOver = false;
 	brickCount = 0;
-
 }
 
+void Bricks::setupExplosions()
+{
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		//explosionList[i].pWindow = &window;
+		explosionList[i].setSprite(explosionTx, sf::Vector2f(64, 64));
+	}
+}
+void Bricks::updateExplosions()
+{
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		explosionList[i].update();
+	}
+}
 void Bricks::draw()
 {
 	for (int j = 0; j < MAX_BRICKS; j++)
@@ -96,6 +115,11 @@ void Bricks::draw()
 			window.draw(bricksList[j].sp);
 		}
 	}
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		if(explosionList[i].active)
+			explosionList[i].draw(window);
+	}
 }
 
 bool Bricks::update()
@@ -103,7 +127,10 @@ bool Bricks::update()
 	draw();
 	// stop moving bricks when game is over
 	if(!gameOver) 
+	{
 		updateBricksPosition();
+		updateExplosions();
+	}
 	return gameOver;
 }
 
@@ -209,15 +236,31 @@ bool Bricks::bulletHit(sf::Vector2f bulletPosion, sf::Vector2f bulletNextPosion,
 			//**********************************************
 			// To avoid the bullet being counted as brick
 			//**********************************************
-			brickCount -= 1;
+			//brickCount -= 1;
 
 			for (std::set<int>::iterator it=sameColorset.begin(); it!=sameColorset.end(); ++it)
 			{
 				bricksList[*it].display = false;
+				
+				
+				if(*it == j) continue;
+
 				//**********************************************
 				// Update the destroyed bricks count
 				//**********************************************
 				brickCount += 1;
+
+				//***********************
+				// Activate the explosion
+				//***********************
+				for (int j = 0; j < MAX_BULLETS; j++)
+				{
+					if(!explosionList[j].active)
+					{
+						explosionList[j].setExplode(bricksList[*it].xy1);
+						break;
+					}
+				}
 			}
 		}
 	}

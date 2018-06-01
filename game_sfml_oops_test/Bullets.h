@@ -1,6 +1,5 @@
 #pragma once
 #include "Bricks.h"
-#include "Explosion.h"
 
 //#define SHOOTER_POSITION_X 450
 //#define SHOOTER_POSITION_Y 470
@@ -17,7 +16,7 @@ public:
 	Bullet();
 	~Bullet();
 	void initi();
-	bool hitBrick(Bricks &bricks, Explosion *pExplosionList);
+	bool hitBrick(Bricks &bricks);
 	void fly();
 	void setSprite(sf::Texture &bulletTx, sf::Vector2f pos);
 	void draw(sf::RenderWindow &myWindow);
@@ -47,20 +46,16 @@ public:
 	bool leftMouseClick;
 	Colors nextBulletColor;
 	Bullet nextBullet;
-	// Collision 
-	sf::Texture explosionTx;
-	Explosion explosionList[MAX_BULLETS];
+
 	int bulletCount;
 
 	// Member Functions
 	void LoadImages();
 	void setupBullets();
-	void setupExplosions();
 	void draw();
 	bool update();
 	void updateShooter();
 	void updateBullets();
-	void updateExplosions();
 	void shootBullets();
 	void chooseNextBulletColor();
 	void setupNextBullet();

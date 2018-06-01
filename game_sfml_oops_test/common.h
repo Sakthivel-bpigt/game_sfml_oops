@@ -42,7 +42,7 @@ using namespace std;
 #define NEXT_BULLET_TIME 0.2 // The time value as a number of seconds.
 
 #define EXPLOSION_TIME 0.2 // The time value as a number of seconds.
-#define START_GAP_TIME 1 // The time value as a number of seconds.
+#define START_SHOOTER_TIME 1 // The time value as a number of seconds.
 
 #define PI 3.14159265
 

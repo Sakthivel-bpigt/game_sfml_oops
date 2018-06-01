@@ -55,7 +55,7 @@ void Game::run()
 				gameWindow.draw(gameOverSp.get());
 				updateScoreDisplay();
 			}
-			if (gameTime.getElapsedTime().asSeconds() > START_GAP_TIME &&
+			if (gameTime.getElapsedTime().asSeconds() > START_SHOOTER_TIME &&
 				sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				//while(gameTime.getElapsedTime().asSeconds() < START_GAP_TIME) {}
@@ -66,7 +66,7 @@ void Game::run()
 			}
 		}else if(!gameOver)
 		{
-			if (gameTime.getElapsedTime().asSeconds() > START_GAP_TIME)
+			if (gameTime.getElapsedTime().asSeconds() > START_SHOOTER_TIME)
 			{
 				gameOver = bullets.update();
 			}

@@ -16,7 +16,6 @@ Bullets::Bullets(sf::RenderWindow &myWindow, Bricks &bricks)
 	shooterSp.setOrigin(sf::Vector2f(64, 64));
 
 	setupBullets();
-	setupExplosions();
 	srand(time(0));
 	chooseNextBulletColor();
 	setupNextBullet();
@@ -55,9 +54,6 @@ void Bullets::LoadImages()
 	if (!bulletTx.loadFromFile("png/element_blue_square.png"))
 		std::cout<<" image loading error!";
 
-	// 128 X 128
-	if (!explosionTx.loadFromFile("png/explosion.png"))
-		std::cout<<" image loading error!";
 }
 void Bullets::setupBullets()
 {
@@ -66,15 +62,6 @@ void Bullets::setupBullets()
 		bulletList[i].color = Colors(rand()%imageCnt);
 		bulletList[i].setSprite(tx[bulletList[i].color], sf::Vector2f(11, 11));
 		//sp[i*10+j].setTexture(tx[rand()%imageCnt]);
-	}
-}
-
-void Bullets::setupExplosions()
-{
-	for (int i = 0; i < MAX_BULLETS; i++)
-	{
-		//explosionList[i].pWindow = &window;
-		explosionList[i].setSprite(explosionTx, sf::Vector2f(64, 64));
 	}
 }
 
@@ -87,9 +74,6 @@ void Bullets::draw()
 	{
 		if(bulletList[i].active)
 			bulletList[i].draw(window);
-
-//		if(explosionList[i].active)
-//			explosionList[i].draw(window);
 	}
 	drawNextBullet();
 }
@@ -99,7 +83,6 @@ bool Bullets::update()
 	updateShooter();
 	shootBullets();
 	updateBullets();
-	updateExplosions();
 	draw();
 	// stop moving bricks when game is over
 	/*if(!gameOver) 
@@ -139,7 +122,7 @@ void Bullets::updateBullets()
 		if(bulletList[i].active)
 		{
 			bulletList[i].fly();
-			bool collision = bulletList[i].hitBrick(bricks, explosionList);
+			bool collision = bulletList[i].hitBrick(bricks);
 		}
 	}
 	if(DEBUG)
@@ -147,14 +130,6 @@ void Bullets::updateBullets()
 		//cout<< "V1 ("<<v1.x<<", "<<v1.y <<")  ";
 		//cout<< v1.x*v2.x + v1.y*v2.y <<"  ";
 		//cout<< -theta<<endl;
-	}
-}
-
-void Bullets::updateExplosions()
-{
-	for (int i = 0; i < MAX_BULLETS; i++)
-	{
-		explosionList[i].update();
 	}
 }
 
@@ -225,7 +200,7 @@ void Bullet::initi()
 	active = false;
 	bulletSpeed = BULLET_SPEED;
 }
-bool Bullet::hitBrick(Bricks &bricks, Explosion *pExplosionList)
+bool Bullet::hitBrick(Bricks &bricks)
 {
 	bool hitSomething = false;
 	if(active)
@@ -235,17 +210,6 @@ bool Bullet::hitBrick(Bricks &bricks, Explosion *pExplosionList)
 		hitSomething = bricks.bulletHit(p1,p2, color);
 		if(hitSomething)
 		{
-			// setting explosion
-			
-			for (int j = 0; j < MAX_BULLETS; j++)
-			{
-				if(!pExplosionList[j].active)
-				{
-					pExplosionList[j].setExplode(xy1);
-					break;
-				}
-			}
-
 			initi();
 		}else
 		{
