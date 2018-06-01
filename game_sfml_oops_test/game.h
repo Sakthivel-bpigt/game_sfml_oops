@@ -25,7 +25,15 @@ private:
 	bool gameStart;
 	sf::Clock gameTime;
 
-
+	// Text Display
+	sf::Font font_arial;
+	sf::Font font_gothic;
+	sf::Text scoreText;
+	sf::Text scoreCountText;
+	int score;
+	sf::Text bulletText;
+	sf::Text bulletCountText;
+	int bulletCount;
 
 
 // member functions
@@ -34,5 +42,8 @@ private:
 	void setupPlayButton();
 	void setupGameOverButton();
 	void gameRestart();
+	void setupScoreDisplay();
+	void updateScoreDisplay();
+	void setupText(sf::Text &text, sf::Font &font, sf::String);
 };
 

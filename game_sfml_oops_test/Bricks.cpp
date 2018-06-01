@@ -82,6 +82,7 @@ void Bricks::setupBricks()
 
 	// in case the game is restarted.
 	gameOver = false;
+	brickCount = 0;
 
 }
 
@@ -204,8 +205,21 @@ bool Bricks::bulletHit(sf::Vector2f bulletPosion, sf::Vector2f bulletNextPosion,
 		set<int> sameColorset;
 		findSameColorNeighbors(brick_col_ID , brick_row_ID, sameColorset);
 		if(sameColorset.size() >1)
+		{
+			//**********************************************
+			// To avoid the bullet being counted as brick
+			//**********************************************
+			brickCount -= 1;
+
 			for (std::set<int>::iterator it=sameColorset.begin(); it!=sameColorset.end(); ++it)
+			{
 				bricksList[*it].display = false;
+				//**********************************************
+				// Update the destroyed bricks count
+				//**********************************************
+				brickCount += 1;
+			}
+		}
 	}
 	return brickHit;
 }

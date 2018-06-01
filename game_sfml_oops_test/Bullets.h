@@ -50,6 +50,7 @@ public:
 	// Collision 
 	sf::Texture explosionTx;
 	Explosion explosionList[MAX_BULLETS];
+	int bulletCount;
 
 	// Member Functions
 	void LoadImages();
@@ -65,6 +66,8 @@ public:
 	void setupNextBullet();
 	void updateNextBullet();
 	void drawNextBullet();
+	int getBulletCount(){return 	bulletCount;}
+	void reset(){bulletCount = 0;}
 
 	Colors randomNumberGen(int limit){return Colors(rand()%limit);};
 	sf::Vector2f calcUnitVector(sf::Vector2f p1, sf::Vector2f p2);

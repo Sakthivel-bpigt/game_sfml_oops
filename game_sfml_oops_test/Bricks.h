@@ -35,6 +35,7 @@ public:
 	sf::Clock brickMoveTime;
 	bool gameOver;
 	int shooter_position ;
+	int brickCount;
 
 	void LoadBrickImages();
 	void setupSprites(int l_x =10, int l_y =10);
@@ -46,6 +47,7 @@ public:
 	bool bulletHit(sf::Vector2f bulletPosion, sf::Vector2f bulletNextPosion, Colors bulletColor);
 	void findSameColorNeighbors(int b_col , int b_row, set<int> &sameColorset);
 	bool lineSegmentIntersction(sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3, sf::Vector2f p4);
+	int getBrickCount(){return 	brickCount;}
 
 };
 

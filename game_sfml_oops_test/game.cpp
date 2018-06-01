@@ -16,12 +16,13 @@ Game::~Game(void)
 
 void Game::initialize()
 {
-	 gameWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Brick shooter");
+	 gameWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Brick shooter", sf::Style::Close);
 	 windowSp.loadSprite("background.jpg");
 	gameOver = true;
 	gameStart = false;
 	 setupPlayButton();
 	 setupGameOverButton();
+	 setupScoreDisplay();
 }
 
 bool Game::update()
@@ -52,6 +53,7 @@ void Game::run()
 			}else
 			{
 				gameWindow.draw(gameOverSp.get());
+				updateScoreDisplay();
 			}
 			if (gameTime.getElapsedTime().asSeconds() > START_GAP_TIME &&
 				sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -69,11 +71,13 @@ void Game::run()
 				gameOver = bullets.update();
 			}
 			gameOver = bricks.update();
-			//cout<<gameOver<<endl;
+			updateScoreDisplay();
+
 			if (gameOver)
 			{
 				gameTime.restart();
 			}
+			
 		}
 
 		gameWindow.display();
@@ -99,4 +103,64 @@ void Game::setupGameOverButton()
 void Game::gameRestart()
 {
 	bricks.setupBricks();
+	bullets.reset();
+}
+
+void Game::setupScoreDisplay()
+{
+	score = 0;
+	bulletCount = 0;
+	// select the font
+	font_arial.loadFromFile("font/ARLRDBD.ttf");
+	font_gothic.loadFromFile("font/SHOWG.ttf");
+
+	setupText(scoreText, font_gothic, "Score");
+	setupText(scoreCountText, font_arial, to_string(score));
+	setupText(bulletText, font_gothic, "Bullets");
+	setupText(bulletCountText, font_arial, to_string(bulletCount));
+
+	// set positions
+	scoreText.setPosition(sf::Vector2f(SCORE_POSITION_X, SCORE_POSITION_Y));
+	scoreCountText.setPosition(sf::Vector2f(SCORE_POSITION_X + 150, SCORE_POSITION_Y));
+
+	// set positions
+	bulletText.setPosition(sf::Vector2f(BULLET_CNT_POSITION_X, BULLET_CNT_POSITION_Y));
+	bulletCountText.setPosition(sf::Vector2f(BULLET_CNT_POSITION_X + 200, BULLET_CNT_POSITION_Y));
+}
+
+void Game::updateScoreDisplay()
+{
+	gameWindow.draw(scoreText);
+	gameWindow.draw(bulletText);
+
+	score = bricks.getBrickCount();
+	scoreCountText.setString(to_string(score));
+	gameWindow.draw(scoreCountText);
+
+	bulletCount = bullets.getBulletCount();
+	bulletCountText.setString(to_string(bulletCount));
+	gameWindow.draw(bulletCountText);
+}
+
+void Game::setupText(sf::Text &text, sf::Font &font, sf::String str)
+{
+	//sf::Text text;
+	text.setFont(font); // font is a sf::Font
+	//scoreText.setFont(font_arial); // font is a sf::Font
+
+	// set the string to display
+	text.setString(str);
+	//scoreText.setString(to_string(score));
+
+	// set the character size
+	text.setCharacterSize(34); // in pixels, not points!
+	//scoreText.setCharacterSize(34); // in pixels, not points!
+
+	// set the color
+	text.setFillColor(sf::Color::Blue);
+	//scoreText.setFillColor(sf::Color::Magenta);
+
+	// set the text style
+	text.setStyle(sf::Text::Bold );//| sf::Text::Underlined);
+	//scoreText.setStyle(sf::Text::Italic );//| sf::Text::Underlined);
 }

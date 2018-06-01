@@ -20,7 +20,7 @@ Bullets::Bullets(sf::RenderWindow &myWindow, Bricks &bricks)
 	srand(time(0));
 	chooseNextBulletColor();
 	setupNextBullet();
-
+	reset();
 }
 
 Bullets::~Bullets(void)
@@ -183,6 +183,7 @@ void Bullets::shootBullets()
 		// choose next bullet color
 		chooseNextBulletColor();
 		updateNextBullet();
+		bulletCount += 1;
 	}
 }
 

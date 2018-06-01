@@ -31,6 +31,12 @@ using namespace std;
 #define SHOOTER_POSITION_X 450
 #define SHOOTER_POSITION_Y 470
 
+#define SCORE_POSITION_X 50
+#define SCORE_POSITION_Y 470
+
+#define BULLET_CNT_POSITION_X 600
+#define BULLET_CNT_POSITION_Y 470
+
 #define MAX_BULLETS 10
 #define BULLET_SPEED 1
 #define NEXT_BULLET_TIME 0.2 // The time value as a number of seconds.
