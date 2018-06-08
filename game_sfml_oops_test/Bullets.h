@@ -1,5 +1,6 @@
 #pragma once
 #include "Bricks.h"
+#include "GameWindow.h"
 
 //#define SHOOTER_POSITION_X 450
 //#define SHOOTER_POSITION_Y 470
@@ -12,6 +13,7 @@ public:
 	bool active ;				// is bullet alive
 	float bulletSpeed;			// bullet travelling speed
 	Colors color;
+	GameWindow *gWindow;
 
 	Bullet();
 	~Bullet();
@@ -20,6 +22,7 @@ public:
 	void fly();
 	void setSprite(sf::Texture &bulletTx, sf::Vector2f pos);
 	void draw(sf::RenderWindow &myWindow);
+	void draw();
 };
 class Bullets
 {
@@ -28,6 +31,7 @@ public:
 	~Bullets(void);
 
 	sf::RenderWindow &window;
+	GameWindow *gWindow;
 	Bricks &bricks;
 	bool gameOver;
 

@@ -17,6 +17,7 @@ Bricks::~Bricks(void)
 
 void Bricks::init()
 {
+	gWindow = GameWindow::getInstance();
 	shooter_position = SHOOTER_POSITION_Y;
 	spriteCnt =100;
 
@@ -112,13 +113,15 @@ void Bricks::draw()
 		if(bricksList[j].display)
 		{
 			bricksList[j].sp.setPosition(	bricksList[j].xy1);
-			window.draw(bricksList[j].sp);
+		//	window.draw(bricksList[j].sp);
+			gWindow->draw(bricksList[j].sp);
 		}
 	}
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
 		if(explosionList[i].active)
-			explosionList[i].draw(window);
+		//	explosionList[i].draw(window);
+			explosionList[i].draw();
 	}
 }
 

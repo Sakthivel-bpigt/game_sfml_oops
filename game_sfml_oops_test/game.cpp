@@ -16,19 +16,27 @@ Game::~Game(void)
 
 void Game::initialize()
 {
-	 gameWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Brick shooter", sf::Style::Close);
-	 windowSp.loadSprite("background.jpg");
+//	gameWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Brick shooter", sf::Style::Close);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	gWindow = GameWindow::getInstance();
+	gWindow->create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Brick shooter(pointer window)", sf::Style::Close);
+	gWindow->setPosition(sf::Vector2i(WINDOW_ORIGIN_X, WINDOW_ORIGIN_Y));
+	windowSp.loadSprite("background.jpg");
 	gameOver = true;
 	gameStart = false;
-	 setupPlayButton();
-	 setupGameOverButton();
-	 setupScoreDisplay();
+	setupPlayButton();
+	setupGameOverButton();
+	setupScoreDisplay();
 }
 
 bool Game::update()
 {
 	gameWindow.clear();
 	gameWindow.draw(windowSp.get());
+//////////////////////////////////////////////////////////
+	gWindow->clear();
+	gWindow->draw(windowSp.get());
 
 	return gameOver;
 }
@@ -81,6 +89,55 @@ void Game::run()
 		}
 
 		gameWindow.display();
+	}
+/////////////////////////////////////////
+	while (gWindow->isOpen())
+    {
+		sf::Event event;
+        while (gWindow->pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                gWindow->close();
+        }
+
+		gameOver = this->update();
+
+		if(gameOver)
+		{
+			if(!gameStart)
+			{
+				gWindow->draw(playSp.get());
+			}else
+			{
+				gWindow->draw(gameOverSp.get());
+				updateScoreDisplay();
+			}
+			if (gameTime.getElapsedTime().asSeconds() > START_SHOOTER_TIME &&
+				sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				//while(gameTime.getElapsedTime().asSeconds() < START_GAP_TIME) {}
+				gameTime.restart();
+				gameStart = true;
+				gameOver = false;
+				gameRestart();
+			}
+		}else if(!gameOver)
+		{
+			if (gameTime.getElapsedTime().asSeconds() > START_SHOOTER_TIME)
+			{
+				gameOver = bullets.update();
+			}
+			gameOver = bricks.update();
+			updateScoreDisplay();
+
+			if (gameOver)
+			{
+				gameTime.restart();
+			}
+			
+		}
+
+		gWindow->display();
 	}
 }
 
@@ -140,6 +197,18 @@ void Game::updateScoreDisplay()
 	bulletCount = bullets.getBulletCount();
 	bulletCountText.setString(to_string(bulletCount));
 	gameWindow.draw(bulletCountText);
+
+/////////////////////////////////////////////////////
+	gWindow->draw(scoreText);
+	gWindow->draw(bulletText);
+
+	score = bricks.getBrickCount();
+	scoreCountText.setString(to_string(score));
+	gWindow->draw(scoreCountText);
+
+	bulletCount = bullets.getBulletCount();
+	bulletCountText.setString(to_string(bulletCount));
+	gWindow->draw(bulletCountText);
 }
 
 void Game::setupText(sf::Text &text, sf::Font &font, sf::String str)

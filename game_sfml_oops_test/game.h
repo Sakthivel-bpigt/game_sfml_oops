@@ -4,6 +4,7 @@
 #include "Bricks.h"
 #include "Explosion.h"
 #include "Bullets.h"
+#include "GameWindow.h"
 
 class Game //:	public sf::RenderWindow
 {
@@ -15,6 +16,7 @@ public:
 private:
 	// window
 	sf::RenderWindow gameWindow;
+	GameWindow *gWindow;
 	Bricks bricks;
 	Bullets bullets;
 	Sprite windowSp;

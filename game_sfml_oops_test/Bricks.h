@@ -1,6 +1,7 @@
 #pragma once
 #include "common.h"
 #include "Explosion.h"
+#include "GameWindow.h"
 class Bricks
 {
 public:
@@ -10,6 +11,7 @@ public:
 	~Bricks(void);
 
 	sf::RenderWindow &window;
+	GameWindow *gWindow;
 	// Bricks
 	sf::Texture tx[10];
 	sf::Sprite sp[MAX_BRICKS];

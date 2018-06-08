@@ -13,6 +13,7 @@ Explosion::~Explosion(void)
 
 void Explosion::initi()
 {
+	gWindow = GameWindow::getInstance();
 	xy1 = sf::Vector2f(SHOOTER_POSITION_X, SHOOTER_POSITION_Y); // Bullet default position
 	active = false;
 	//life = EXPLOSION_TIME;
@@ -45,4 +46,10 @@ void Explosion::draw(sf::RenderWindow &myWindow)
 {
 	explosionSp.setPosition(xy1);
 	myWindow.draw(explosionSp);
+}
+
+void Explosion::draw()
+{
+	explosionSp.setPosition(xy1);
+	gWindow->draw(explosionSp);
 }

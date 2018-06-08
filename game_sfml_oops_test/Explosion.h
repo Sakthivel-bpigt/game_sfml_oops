@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include "GameWindow.h"
 class Explosion
 {
 public:
@@ -12,6 +13,7 @@ public:
 	bool active ;				// is Explosion alive
 	//float bulletSpeed;			// bullet travelling speed
 	sf::Clock life;
+	GameWindow *gWindow;
 
 	void initi();
 	//void hitBrick(Bricks &bricks);
@@ -20,5 +22,6 @@ public:
 	void setExplode(sf::Vector2f position);
 	void update();
 	void draw(sf::RenderWindow &myWindow);
+	void draw();
 };
 

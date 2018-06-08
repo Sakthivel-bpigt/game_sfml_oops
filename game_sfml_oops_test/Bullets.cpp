@@ -4,6 +4,8 @@ Bullets::Bullets(sf::RenderWindow &myWindow, Bricks &bricks)
 	: window(myWindow)
 	, bricks(bricks)
 {
+	gWindow = GameWindow::getInstance();
+
 	gameOver = false;
 	shooter_position = sf::Vector2f(SHOOTER_POSITION_X, SHOOTER_POSITION_Y);
 	//bulletSpeed = 1;
@@ -68,12 +70,14 @@ void Bullets::setupBullets()
 void Bullets::draw()
 {
 	shooterSp.setPosition(shooter_position);
-	window.draw(shooterSp);
+	//window.draw(shooterSp);
+	gWindow->draw(shooterSp);
 
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
 		if(bulletList[i].active)
-			bulletList[i].draw(window);
+			//bulletList[i].draw(window);
+			bulletList[i].draw();
 	}
 	drawNextBullet();
 }
@@ -92,7 +96,8 @@ bool Bullets::update()
 
 void Bullets::updateShooter()
 {
-	sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(window));
+	sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition());
+	mousePosition -= sf::Vector2f(WINDOW_ORIGIN_X, WINDOW_ORIGIN_Y);
 
 	sf::Vector2f v1 = calcUnitVector(shooter_position, mousePosition);
 	sf::Vector2f v2 = sf::Vector2f (1,0.0000001);
@@ -142,7 +147,8 @@ void Bullets::shootBullets()
 		if(NextBulletWaitTime.getElapsedTime().asSeconds() < NEXT_BULLET_TIME) return;
 		NextBulletWaitTime.restart();
 		
-		sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(window));
+		sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition());
+		mousePosition -= sf::Vector2f(WINDOW_ORIGIN_X, WINDOW_ORIGIN_Y);
 		for (int i = 0; i < MAX_BULLETS; i++)
 		{
 			if(!bulletList[i].active)
@@ -181,7 +187,9 @@ void Bullets::updateNextBullet()
 
 void Bullets::drawNextBullet()
 {
-	nextBullet.draw(window);
+	//nextBullet.draw(window);
+////////////////////////////////////////////////////////////
+	nextBullet.draw();
 }
 
 Bullet::Bullet()
@@ -195,6 +203,7 @@ Bullet::~Bullet()
 
 void Bullet::initi()
 {
+	gWindow = GameWindow::getInstance();
 	xy1 = sf::Vector2f(SHOOTER_POSITION_X, SHOOTER_POSITION_Y); // Bullet default position
 	direction = sf::Vector2f(0, 0); // Bullet default direction
 	active = false;
@@ -237,4 +246,10 @@ void Bullet::draw(sf::RenderWindow &myWindow)
 {
 	bulletSp.setPosition(xy1);
 	myWindow.draw(bulletSp);
+}
+
+void Bullet::draw()
+{
+	bulletSp.setPosition(xy1);
+	gWindow->draw(bulletSp);
 }
