@@ -7,10 +7,9 @@ class Bricks
 public:
 	//Bricks(void);
 	//Bricks(void);
-	Bricks(sf::RenderWindow &myWindow);
+	Bricks();
 	~Bricks(void);
 
-	sf::RenderWindow &window;
 	GameWindow *gWindow;
 	// Bricks
 	sf::Texture tx[10];

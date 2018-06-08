@@ -27,10 +27,9 @@ public:
 class Bullets
 {
 public:
-	Bullets(sf::RenderWindow &myWindow, Bricks &bricks);
+	Bullets(Bricks &bricks);
 	~Bullets(void);
 
-	sf::RenderWindow &window;
 	GameWindow *gWindow;
 	Bricks &bricks;
 	bool gameOver;

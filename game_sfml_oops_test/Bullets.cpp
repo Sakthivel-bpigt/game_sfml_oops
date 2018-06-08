@@ -1,8 +1,7 @@
 #include "Bullets.h"
 
-Bullets::Bullets(sf::RenderWindow &myWindow, Bricks &bricks)
-	: window(myWindow)
-	, bricks(bricks)
+Bullets::Bullets(Bricks &bricks)
+	: bricks(bricks)
 {
 	gWindow = GameWindow::getInstance();
 
@@ -241,11 +240,6 @@ void Bullet::setSprite(sf::Texture &bulletTx, sf::Vector2f pos)
 {
 	bulletSp.setTexture(bulletTx);
 	bulletSp.setOrigin(pos);
-}
-void Bullet::draw(sf::RenderWindow &myWindow)
-{
-	bulletSp.setPosition(xy1);
-	myWindow.draw(bulletSp);
 }
 
 void Bullet::draw()

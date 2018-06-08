@@ -42,12 +42,6 @@ void Explosion::update()
 	}
 }
 
-void Explosion::draw(sf::RenderWindow &myWindow)
-{
-	explosionSp.setPosition(xy1);
-	myWindow.draw(explosionSp);
-}
-
 void Explosion::draw()
 {
 	explosionSp.setPosition(xy1);

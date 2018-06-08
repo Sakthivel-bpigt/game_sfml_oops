@@ -6,7 +6,7 @@
 ////	window = NULL;
 //}
 
-Bricks::Bricks(sf::RenderWindow &myWindow):window(myWindow)
+Bricks::Bricks()
 {
 	init();
 }
@@ -95,7 +95,6 @@ void Bricks::setupExplosions()
 {
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
-		//explosionList[i].pWindow = &window;
 		explosionList[i].setSprite(explosionTx, sf::Vector2f(64, 64));
 	}
 }
@@ -113,14 +112,12 @@ void Bricks::draw()
 		if(bricksList[j].display)
 		{
 			bricksList[j].sp.setPosition(	bricksList[j].xy1);
-		//	window.draw(bricksList[j].sp);
 			gWindow->draw(bricksList[j].sp);
 		}
 	}
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
 		if(explosionList[i].active)
-		//	explosionList[i].draw(window);
 			explosionList[i].draw();
 	}
 }
