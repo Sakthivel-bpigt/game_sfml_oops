@@ -47,7 +47,7 @@ I am planing to make a shooter game using those assets so they might look lot li
 
 ## Using This Project with Visual Studion 2017
 * I used the Visual Studio 2012 when i made this project.
-* If you want to use this project on Visual Studio 2017 you have to use the appropriate SFML version as well, in this case you can download SFML 2.5.* .
+* If you want to use this project on Visual Studio 2017 you have to use the appropriate [SFML version](https://www.sfml-dev.org/download/sfml/2.5.1/) as well, in this case you can download SFML 2.5.* .
 * In this project, find and replace the files from 'Includes' and 'Libs' folders with latest SFML version files and also the SFML DLLs in the debug folder.
 
 
