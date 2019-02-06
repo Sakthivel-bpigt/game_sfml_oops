@@ -1,10 +1,13 @@
-#...Making a Game 
-Overview
+# ...Making a Game 
+
+## Overview
+
 I came across situation where I had to explain how to work with C++ project to group of first timers. So I decided to put that in writing, as a result I am wrting this blog about how to make a simple 2D game.
 
 
 
-Game Idea 
+## Game Idea 
+
 Lets make a brick shooter game, the idea is from the old famous game called bubble shooter.
 
 
